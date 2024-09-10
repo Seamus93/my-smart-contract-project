@@ -1,0 +1,22 @@
+name: SmartBugs Analysis
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Run SmartBugs
+        run: |
+          git clone https://github.com/smartbugs/smartbugs.git
+          cd smartbugs
+          ./install/setup-venv.sh
+          ./smartbugs -t mythril,slither -f path/to/your/contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+          ./reparse results
+          ./results2csv -p results > results.csv
