@@ -1,0 +1,36 @@
+language: python
+python:
+  - "3.8"
+
+services:
+  - docker
+
+before_install:
+  # Aggiorna i pacchetti e installa Docker
+  - sudo apt-get update
+  - sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+  # Aggiungi l'utente corrente al gruppo Docker
+  - sudo usermod -aG docker $USER
+  # Riavvia il servizio Docker
+  - sudo service docker restart
+  # Clona il repository SmartBugs
+  - git clone https://github.com/smartbugs/smartbugs.git
+  # Entra nella cartella di SmartBugs
+  - cd smartbugs
+  # Installa le dipendenze Python in un ambiente virtuale
+  - ./install/setup-venv.sh
+
+script:
+  # Esegui SmartBugs con un esempio di contratto Solidity (puoi sostituirlo con i tuoi file .sol)
+  - ./smartbugs -t mythril,slither -f contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+  # Dopo l'analisi, esegui il reparse per estrarre le informazioni
+  - ./reparse results
+  # Converte i risultati in formato CSV
+  - ./results2csv -p results > results.csv
+
+notifications:
+  email:
+    recipients:
+      - simonefioroni93@gmail.com
+    on_success: change
+    on_failure: always
