@@ -19,15 +19,12 @@ jobs:
           cd smartbugs
           ./install/setup-venv.sh
 
-      - name: List files in contracts
-        run: ls -la ../contracts
-
       - name: Run SmartBugs
         run: |
           cd smartbugs
-          ./smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
-          ./reparse results
-          ./results2csv -p results > results.csv
+          ../smartbugs/smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+          ../smartbugs/reparse results
+          ../smartbugs/results2csv -p results > results.csv
 
       - name: Upload results
         uses: actions/upload-artifact@v3
