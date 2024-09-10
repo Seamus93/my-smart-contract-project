@@ -5,6 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -12,11 +13,24 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Run SmartBugs
+      - name: Install SmartBugs
         run: |
           git clone https://github.com/smartbugs/smartbugs.git
           cd smartbugs
           ./install/setup-venv.sh
-          ./smartbugs -t all -f /contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+
+      - name: List files in contracts
+        run: ls -la ../contracts
+
+      - name: Run SmartBugs
+        run: |
+          cd smartbugs
+          ./smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
           ./reparse results
           ./results2csv -p results > results.csv
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: results
+          path: smartbugs/results.csv
