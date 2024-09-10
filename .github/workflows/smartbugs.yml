@@ -17,6 +17,6 @@ jobs:
           git clone https://github.com/smartbugs/smartbugs.git
           cd smartbugs
           ./install/setup-venv.sh
-          ./smartbugs -t mythril,slither -f path/to/your/contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+          ./smartbugs -t all -f path/to/your/contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
           ./reparse results
           ./results2csv -p results > results.csv
