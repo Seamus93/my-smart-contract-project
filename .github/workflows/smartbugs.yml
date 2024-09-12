@@ -25,7 +25,7 @@ jobs:
       - name: Get the latest modified .sol file
         id: get_latest_file
         run: |
-          latest_file=$(git diff --name-only HEAD~1 HEAD | grep '.sol' | head -n 1)
+          latest_file=$(echo "${{ github.event.head_commit.modified }}" | grep '.sol' | head -n 1)
           echo "LATEST_FILE=${latest_file}" >> $GITHUB_ENV
 
       - name: Run SmartBugs
