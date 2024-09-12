@@ -28,17 +28,23 @@ jobs:
 
       - name: Run SmartBugs
         run: |
-          cd smartbugs
-          # Assicurati che LATEST_FILE sia utilizzato correttamente
           if [ -n "${{ env.LATEST_FILE }}" ]; then
-            ../smartbugs/smartbugs -t all -f ../${{ env.LATEST_FILE }} --processes 2 --mem-limit 4g --timeout 600
-            ../smartbugs/reparse results
-            ../smartbugs/results2csv -p results > ${{ github.workspace }}/results.csv
+            echo "Using file: ${{ env.LATEST_FILE }}"
+            if [ -f "${{ env.LATEST_FILE }}" ]; then
+              # Esegui l'analisi solo se il file esiste
+              cd smartbugs
+              ../smartbugs/smartbugs -t all -f ../${{ env.LATEST_FILE }} --processes 2 --mem-limit 4g --timeout 600
+              ../smartbugs/reparse results
+              ../smartbugs/results2csv -p results > ${{ github.workspace }}/results.csv
+            else
+              echo "File ${{ env.LATEST_FILE }} does not exist."
+              exit 1
+            fi
           else
             echo "No .sol files found in the latest commit."
             exit 1
           fi
-
+          
       - name: List root directory contents
         run: ls -la ${{ github.workspace }}
 
