@@ -1,6 +1,9 @@
 name: SmartBugs Analysis
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'contracts/*.sol'
 
 jobs:
   build:
