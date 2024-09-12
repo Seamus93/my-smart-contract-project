@@ -22,16 +22,22 @@ jobs:
           cd smartbugs
           ./install/setup-venv.sh
 
+      - name: Get the latest modified .sol file
+        id: get_latest_file
+        run: |
+          latest_file=$(git diff --name-only HEAD~1 HEAD | grep '.sol' | head -n 1)
+          echo "LATEST_FILE=${latest_file}" >> $GITHUB_ENV
+
       - name: Run SmartBugs
         run: |
           cd smartbugs
-          ../smartbugs/smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+          ../smartbugs/smartbugs -t all -f ../contracts/${{ env.LATEST_FILE }} --processes 2 --mem-limit 4g --timeout 600
           ../smartbugs/reparse results
           ../smartbugs/results2csv -p results > ${{ github.workspace }}/results.csv  # Salva i risultati nella root del tuo repo
-          
+
       - name: List root directory contents
         run: ls -la ${{ github.workspace }}  # Elenca il contenuto della root del tuo repo
-        
+
       - name: Upload Results to Pinata
         run: |
           curl -v -X POST "https://api.pinata.cloud/pinning/pinFileToIPFS" \
