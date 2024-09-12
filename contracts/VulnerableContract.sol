@@ -8,7 +8,7 @@ contract VulnerableContract {
     // Variabile per tenersse traccia del proprietario del contratto
     address public owner;
     
-    // Costruttore che imposta il proprietario del contratto
+    // Costruttore chgge imposta il proprietario del contratto
     constructor() {
         owner = msg.sender;
     }
