@@ -25,10 +25,12 @@ jobs:
           ../smartbugs/smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
           ../smartbugs/reparse results
           ../smartbugs/results2csv -p results > results.csv
-
+          
+      - name: List directory contents
+        run: ls -la
+        
       - name: Upload Results to Pinata
         run: |
-          curl -X POST "https://api.pinata.cloud/pinning/pinFileToIPFS" \
-            -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" \
-            -H "pinata_secret_api_key: ${{ secrets.PINATA_API_SECRET }}" \
-            -F "file=@results/smartbugs_output.json"
+          curl -v -X POST "https://api.pinata.cloud/pinning/pinFileToIPFS" \
+            -H "Authorization: Bearer ${{ secrets.PINATA_JWT }}" \
+            -F "file=@results.csv"
