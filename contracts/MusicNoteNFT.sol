@@ -7,7 +7,7 @@ contract MusicNoteNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burna
 
     uint public MAX_PER_MINT = 5;
     string public baseTokenURI;
-
+//pippo
     constructor(address initialOwner) ERC721("MusicNoteNFT", "MNFT") Ownable (initialOwner){
     }
 
