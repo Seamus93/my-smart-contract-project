@@ -26,8 +26,9 @@ jobs:
           ../smartbugs/reparse results
           ../smartbugs/results2csv -p results > results.csv
 
-      - name: Upload results
-        uses: actions/upload-artifact@v4
-        with:
-          name: results
-          path: smartbugs/results.csv
+      - name: Upload Results to Pinata
+        run: |
+          curl -X POST "https://api.pinata.cloud/pinning/pinFileToIPFS" \
+            -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" \
+            -H "pinata_secret_api_key: ${{ secrets.PINATA_API_SECRET }}" \
+            -F "file=@results/smartbugs_output.json"
