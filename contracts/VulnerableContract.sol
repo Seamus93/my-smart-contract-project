@@ -5,10 +5,10 @@ contract VulnerableContract {
     // Mappatura per tenere traccia degli saldi degli utenti
     mapping(address => uint256) public balances;
     
-    // Variabile per tenersse traccia del proprietario del contratto
+    // Variabile per tenere traccia del proprietario del contratto
     address public owner;
     
-    // Costruttore chgge imposta il proprietario del contratto
+    // Costruttore che imposta il proprietario del contratto
     constructor() {
         owner = msg.sender;
     }

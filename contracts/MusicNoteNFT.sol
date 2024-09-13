@@ -1,5 +1,7 @@
-// SPDX-License-Identifier: UNLICENSED
+//SPDX-License-Identifier: UNLICENSED
+
 pragma solidity ^0.8.20;
+
 contract MusicNoteNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, ERC721Pausable, Ownable, ReentrancyGuard {
     using Address for address;
 
