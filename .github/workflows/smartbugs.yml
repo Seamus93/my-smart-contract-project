@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Scrivi il contratto ricevuto in un file
+        run: |
+          echo "${{ github.event.inputs.contractCode }}" > contracts/Contract.sol
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
