@@ -1,9 +1,12 @@
 name: SmartBugs Analysis
 
 on:
-  push:
-    paths:
-      - 'contracts/*.sol'
+ workflow_dispatch:
+    inputs:
+      contractCode:
+        description: "Codice del contratto Solidity da analizzare"
+        required: true
+        type: string
 
 jobs:
   build:
