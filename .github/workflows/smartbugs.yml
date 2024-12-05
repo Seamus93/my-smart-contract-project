@@ -18,6 +18,7 @@ jobs:
         
       - name: Scrivi il contratto ricevuto in un file
         run: |
+          mkdir -p contracts  # Crea la cartella 'contracts' se non esiste
           echo "${{ github.event.inputs.contractCode }}" > contracts/Contract.sol
 
       - name: Set up Docker
