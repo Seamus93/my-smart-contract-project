@@ -37,8 +37,11 @@ jobs:
           ../smartbugs/reparse results
           ../smartbugs/results2csv -p results > ${{ github.workspace }}/results.csv  # Salva i risultati nella root del tuo repo
           
-      - name: List root directory contents
-        run: ls -la ${{ github.workspace }}  # Elenca il contenuto della root del tuo repo
+      - name: Verifica creazione del file results.csv
+        run: |
+         ls -la ${{ github.workspace }}
+         cat ${{ github.workspace }}/results.csv || echo "Il file è vuoto o non esiste!"
+
         
       - name: Send Results via POST to POSTMAN
         run: |
