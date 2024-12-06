@@ -33,10 +33,11 @@ jobs:
       - name: Run SmartBugs
         run: |
           cd smartbugs
-          ../smartbugs/smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
-          ../smartbugs/reparse results
-          ../smartbugs/results2csv -p results > ${{ github.workspace }}/results.csv  # Salva i risultati nella root del tuo repo
-          
+          ./smartbugs -t all -f ../contracts/*.sol --processes 2 --mem-limit 4g --timeout 600
+          ./reparse results
+          ./results2csv -p results > results.csv  # Salva i risultati nella directory smartbugs
+          mv results.csv ${{ github.workspace }}/results.csv  # Sposta il file nella root del workspace
+   
       - name: Verifica creazione del file results.csv
         run: |
          ls -la ${{ github.workspace }}
