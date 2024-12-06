@@ -46,12 +46,13 @@ jobs:
         
       - name: Send Results via POST to POSTMAN
         run: |
+          FILE_CONTENT=$(cat ${{ github.workspace }}/results.csv | jq -Rs .)
           curl -X POST "https://d46e41a3-c9d5-4481-a97d-f5f047acb98a.mock.pstmn.io/results" \
             -H "Content-Type: application/json" \
-            -d '{
-              "status": "success",
-              "message": "SmartBugs analysis completed",
-              "data": {
-                "resultsUrl": "https://github.com/${{ github.repository }}/blob/main/results.csv"
+            -d "{
+              \"status\": \"success\",
+              \"message\": \"SmartBugs analysis completed\",
+              \"data\": {
+                \"results\": $FILE_CONTENT
               }
-            }'
+            }"
