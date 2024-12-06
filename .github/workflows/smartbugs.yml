@@ -40,8 +40,14 @@ jobs:
       - name: List root directory contents
         run: ls -la ${{ github.workspace }}  # Elenca il contenuto della root del tuo repo
         
-      - name: Upload Results to Pinata
+      - name: Send Results via POST to POSTMAN
         run: |
-          curl -v -X POST "https://api.pinata.cloud/pinning/pinFileToIPFS" \
-            -H "Authorization: Bearer ${{ secrets.PINATA_JWT }}" \
-            -F "file=@${{ github.workspace }}/results.csv"  # Fa l'upload del file results.csv dalla root del repo
+          curl -X POST "https://d46e41a3-c9d5-4481-a97d-f5f047acb98a.mock.pstmn.io/results" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "status": "success",
+              "message": "SmartBugs analysis completed",
+              "data": {
+                "resultsUrl": "https://github.com/${{ github.repository }}/blob/main/results.csv"
+              }
+            }'
