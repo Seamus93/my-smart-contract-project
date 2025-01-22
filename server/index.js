@@ -20,7 +20,7 @@ const provider = new ethers.providers.JsonRpcProvider('https://eth-sepolia.g.alc
 const privateKey = process.env['PRIVATE_KEY']; // Chiave privata tramite variabili d'ambiente
 const wallet = new ethers.Wallet(privateKey, provider);
 
-const API_KEY = process.env['API_KEY']; // API Key per autenticazione
+const api_key = process.env['API_KEY']; // API Key per autenticazione
 
 // Funzione per compilare il contratto
 const compileContract = (contractCode) => {
@@ -82,7 +82,7 @@ app.post('/deploy', async (req, res) => {
 
         // Verifica dell'API Key
         const requestApiKey = req.headers['x-api-key'];
-        if (requestApiKey !== API_KEY) {
+        if (requestApiKey !== api_key) {
             console.error('Forbidden: Invalid API Key');
             return res.status(403).json({ success: false, error: 'Forbidden: Invalid API Key' });
         }
