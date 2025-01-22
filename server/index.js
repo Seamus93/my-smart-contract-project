@@ -16,7 +16,9 @@ app.get('/', (req, res) => {
   
 
 // Configurazione Blockchain
-const provider = new ethers.providers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/fALCkGc4OF_ktGDNeHH6Eqe47abs8ojo'); // URL RPC come variabile d'ambiente
+const rpcUrl = process.env['PRIVATE_RPC_URL'];
+const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+
 const privateKey = process.env['PRIVATE_KEY']; // Chiave privata tramite variabili d'ambiente
 const wallet = new ethers.Wallet(privateKey, provider);
 
