@@ -1,12 +1,13 @@
 {
     "name": "My Node.js App",
     "build": {
-      "dockerfile": "../Dockerfile"
+      "dockerfile": "../Dockerfile",
+      "context": ".."
     },
     "forwardPorts": [3000],
     "postCreateCommand": "npm install",
     "runArgs": [
       "--env-file",
-      "containerEnv.env"
+      "devcontainer/containerEnv.env"
     ]
   }  
