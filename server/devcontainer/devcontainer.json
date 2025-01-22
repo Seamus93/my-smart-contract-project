@@ -5,9 +5,5 @@
       "context": ".."
     },
     "forwardPorts": [3000],
-    "postCreateCommand": "npm install",
-    "runArgs": [
-      "--env-file",
-      "devcontainer/containerEnv.env"
-    ]
-  }  
+    "postCreateCommand": "npm install"
+  }
