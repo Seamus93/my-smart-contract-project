@@ -1,7 +1,5 @@
 # my-project/docker-compose.yml
 
-version: '3.8'
-
 services:
   golem-node:
     build:

@@ -1,4 +1,4 @@
-name: golem-workers-example
+name: golem-workers
 
 services:
   golem-node:
