@@ -8,7 +8,7 @@
   "postCreateCommand": "npm install",
   "runArgs": [
     "--env-file",
-    "devcontainer/containerEnv.env"
+    "server/devcontainer/containerEnv.env"
   ],
   "settings": {},
   "extensions": []
