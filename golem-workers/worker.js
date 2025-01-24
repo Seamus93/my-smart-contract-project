@@ -10,9 +10,12 @@ const PORT = process.env.WORKER_PORT || 8000;
 // Middleware
 app.use(bodyParser.json());
 
-// Configurazione di Ethers.js
-const provider = new ethers.providers.InfuraProvider(process.env.NETWORK, process.env.INFURA_PROJECT_ID);
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+// Configurazione Blockchain
+const rpcUrl = process.env['PRIVATE_RPC_URL'];
+const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+
+const privateKey = process.env['PRIVATE_KEY']; // Chiave privata tramite variabili d'ambiente
+const wallet = new ethers.Wallet(privateKey, provider);
 
 // Endpoint per il deploy del contratto
 app.post('/deploy', async (req, res) => {
