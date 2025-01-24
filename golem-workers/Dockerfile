@@ -1,18 +1,24 @@
 # golem-workers/Dockerfile
 
-FROM python:3.8-slim
+FROM node:16-alpine
 
-# Installa le dipendenze necessarie
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-        openssh-client \
-    && rm -rf /var/lib/apt/lists/*
+# Imposta la directory di lavoro nel container
+WORKDIR /app
 
-# Installa golem-workers
-RUN pip install golem-workers
+# Copia package.json e package-lock.json nella directory di lavoro
+COPY package*.json ./
 
-# Espone la porta su cui Golem-Workers ascolta
+# Installa le dipendenze
+RUN npm install
+
+# Installa solc (compilatore Solidity)
+RUN npm install solc
+
+# Copia tutto il resto del codice nell'immagine
+COPY . .
+
+# Espone la porta su cui il worker ascolta
 EXPOSE 8000
 
-# Definisci il comando per avviare Golem-Workers
-CMD ["uvicorn", "--host", "0.0.0.0", "golem_workers.entrypoints.web.main:app"]
+# Definisci il comando per avviare l'applicazione
+CMD ["node", "worker.js"]

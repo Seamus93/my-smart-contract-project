@@ -5,7 +5,7 @@ const { ethers } = require('ethers');
 const solc = require('solc');
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
@@ -107,6 +107,6 @@ app.post('/deploy', async (req, res) => {
 });
 
 // Avvio del server
-app.listen(port, () => {
-    console.log(`Deploy contract server listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Deploy contract server listening at http://localhost:${PORT}`);
 });
