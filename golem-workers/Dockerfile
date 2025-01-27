@@ -1,4 +1,4 @@
-# golem-workers/Dockerfile
+# web/Dockerfile
 
 FROM node:16-alpine
 
@@ -14,8 +14,8 @@ RUN npm install
 # Installa solc (compilatore Solidity), curl, unzip e bash
 RUN npm install solc && apk add --no-cache curl unzip bash
 
-# Scarica e installa Yagna tramite lo script ufficiale
-RUN curl -sSf https://join.golem.network/as-requestor | bash -
+# Automatizza l'accettazione del disclaimer usando 'yes'
+RUN yes | curl -sSf https://join.golem.network/as-requestor | bash -
 
 # Copia tutto il resto del codice nell'immagine
 COPY . .
