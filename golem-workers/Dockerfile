@@ -11,11 +11,10 @@ COPY package*.json ./
 # Installa le dipendenze
 RUN npm install
 
-# Installa solc (compilatore Solidity)
-RUN npm install solc
+# Installa solc (compilatore Solidity), curl, unzip e bash
+RUN npm install solc && apk add --no-cache curl unzip bash
 
-# Installa Yagna
-RUN apk add --no-cache curl
+# Scarica e installa Yagna tramite lo script ufficiale
 RUN curl -sSf https://join.golem.network/as-requestor | bash -
 
 # Copia tutto il resto del codice nell'immagine
