@@ -71,6 +71,10 @@ app.post('/deploy', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('Worker is up and running');
+});
+
 app.listen(PORT, () => {
     console.log(`Worker server listening at http://localhost:${PORT}`);
 });
