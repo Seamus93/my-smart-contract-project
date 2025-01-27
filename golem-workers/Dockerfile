@@ -15,10 +15,7 @@ RUN npm install
 RUN npm install solc && apk add --no-cache curl unzip bash
 
 # Scarica e installa Yagna manualmente
-RUN curl -sSf https://github.com/golemfactory/yagna/releases/download/v0.16.0/yagna-linux-x86_64.tar.gz -o yagna.tar.gz \
-    && tar -xzf yagna.tar.gz -C /usr/local/bin/ \
-    && rm yagna.tar.gz \
-    && chmod +x /usr/local/bin/yagna
+RUN yes | curl -sSf https://raw.githubusercontent.com/golemfactory/yagna/main/install.sh | bash -
 
 # Copia tutto il resto del codice nell'immagine
 COPY . .
