@@ -16,9 +16,7 @@ RUN npm install solc
 
 # Installa Yagna
 RUN apk add --no-cache curl
-RUN curl -L https://github.com/golemfactory/yagna/releases/download/v0.9.1/yagna-linux-x86_64.zip -o yagna.zip \
-    && unzip yagna.zip -d /usr/local/bin/ \
-    && rm yagna.zip
+RUN curl -sSf https://join.golem.network/as-requestor | bash -
 
 # Copia tutto il resto del codice nell'immagine
 COPY . .
