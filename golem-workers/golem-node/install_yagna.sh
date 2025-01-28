@@ -78,6 +78,11 @@ autodetect_bin() {
 ensurepath() {
     local _required _save_ifs _path _rcfile
 
+    # Salta la richiesta di aggiungere al PATH in modalità batch
+    if [ "${BATCH_MODE:-no}" = "yes" ]; then
+        return
+    fi
+
     _required="$1"
     _save_ifs="$IFS"
     IFS=":"
