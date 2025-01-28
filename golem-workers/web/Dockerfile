@@ -1,4 +1,4 @@
-# node-server/Dockerfile
+# golem-workers/web/Dockerfile
 
 FROM node:16-alpine
 
@@ -14,11 +14,15 @@ RUN npm install
 # Installa solc, curl, unzip e bash
 RUN npm install solc && apk add --no-cache curl unzip bash
 
+# Scarica e installa Yagna tramite script
+COPY install_yagna.sh .
+RUN chmod +x install_yagna.sh && ./install_yagna.sh
+
 # Copia tutto il resto del codice nell'immagine
 COPY . .
 
-# Espone la porta necessaria
-EXPOSE 3000
+# Espone le porte necessarie
+EXPOSE 8000 8080 8081
 
-# Definisci il comando per avviare il server
+# Definisci il comando per avviare il server web
 CMD ["node", "server.js"]

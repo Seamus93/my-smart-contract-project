@@ -1,9 +1,11 @@
 # my-smart-contract-project/docker-compose.yml
 
+version: '3.8'  # Assicurati di usare una versione compatibile con le tue esigenze
+
 services:
   golem-node:
     build:
-      context: ./golem-workers
+      context: ./golem-workers/golem-node
       dockerfile: Dockerfile
     env_file:
       - .env
@@ -11,15 +13,16 @@ services:
       YAGNA_AUTOCONF_APPKEY: ${YAGNA_AUTOCONF_APPKEY}
       YAGNA_API_URL: ${YAGNA_API_URL}
       GSB_URL: ${GSB_URL}
-    command: yagna service run
     volumes:
       - yagna-data:/root/.local/share/yagna
     ports:
       - "7465:7465"
+    networks:
+      - my-network
 
   web:
     build:
-      context: ./golem-workers
+      context: ./golem-workers/web
       dockerfile: Dockerfile
     env_file:
       - .env
@@ -32,6 +35,10 @@ services:
       - "8000:8000"
       - "8080:8080"
       - "8081:8081"
+    depends_on:
+      - golem-node
+    networks:
+      - my-network
 
   node-server:
     build:
@@ -48,10 +55,12 @@ services:
     depends_on:
       - golem-node
       - worker
+    networks:
+      - my-network
 
   worker:
     build:
-      context: ./golem-workers
+      context: ./golem-workers/worker
       dockerfile: Dockerfile
     env_file:
       - .env
@@ -60,9 +69,15 @@ services:
       PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
       API_KEY: ${API_KEY}
     ports:
-      - "8001:8000"  # Porta esterna diversa se necessario
+      - "8001:8000"  # Mappa la porta interna 8000 a 8001 esternamente
     depends_on:
       - golem-node
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
 
 volumes:
   yagna-data:
