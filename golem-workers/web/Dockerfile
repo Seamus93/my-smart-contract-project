@@ -1,4 +1,4 @@
-# golem-workers/web/Dockerfile
+# golem-workers/golem-node/Dockerfile
 
 FROM node:16-alpine
 
@@ -11,18 +11,20 @@ COPY package*.json ./
 # Installa le dipendenze
 RUN npm install
 
-# Installa solc, curl, unzip e bash
+# Installa solc (compilatore Solidity), curl, unzip e bash
 RUN npm install solc && apk add --no-cache curl unzip bash
 
-# Scarica e installa Yagna tramite script
+# Copia lo script di installazione di Yagna
 COPY install_yagna.sh .
+
+# Imposta la variabile d'ambiente per accettare automaticamente i termini di servizio
+ENV GOLEM_ACCEPT_TOS=yes
+
+# Rendi eseguibile e esegui lo script di installazione di Yagna
 RUN chmod +x install_yagna.sh && ./install_yagna.sh
 
-# Copia tutto il resto del codice nell'immagine
-COPY . .
+# Espone la porta di Yagna
+EXPOSE 7465
 
-# Espone le porte necessarie
-EXPOSE 8000 8080 8081
-
-# Definisci il comando per avviare il server web
-CMD ["node", "server.js"]
+# Definisci il comando per avviare Yagna
+CMD ["yagna", "service", "run"]

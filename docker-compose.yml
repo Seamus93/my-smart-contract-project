@@ -1,7 +1,5 @@
 # my-smart-contract-project/docker-compose.yml
 
-version: '3.8'  # Assicurati di usare una versione compatibile con le tue esigenze
-
 services:
   golem-node:
     build:
