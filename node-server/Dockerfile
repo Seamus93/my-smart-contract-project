@@ -11,7 +11,7 @@ COPY package*.json ./
 # Installa le dipendenze
 RUN npm install
 
-# Installa solc, curl, unzip e bash
+# Installa solc (compilatore Solidity), curl, unzip e bash
 RUN npm install solc && apk add --no-cache curl unzip bash
 
 # Copia tutto il resto del codice nell'immagine

@@ -14,8 +14,13 @@ RUN npm install
 # Installa solc (compilatore Solidity), curl, unzip e bash
 RUN npm install solc && apk add --no-cache curl unzip bash
 
-# Scarica e installa Yagna tramite script
+# Copia lo script di installazione di Yagna
 COPY install_yagna.sh .
+
+# Imposta la variabile d'ambiente per accettare automaticamente i termini di servizio
+ENV GOLEM_ACCEPT_TOS=yes
+
+# Rendi eseguibile e esegui lo script di installazione di Yagna
 RUN chmod +x install_yagna.sh && ./install_yagna.sh
 
 # Espone la porta di Yagna
