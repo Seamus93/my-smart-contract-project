@@ -16,6 +16,7 @@ RUN npm install solc && apk add --no-cache curl unzip bash
 
 # Copia lo script di installazione di Yagna
 COPY install_yagna.sh .
+COPY entrypoint_web.sh .
 
 # Imposta le variabili d'ambiente per accettare automaticamente i termini di servizio e batch mode
 ENV GOLEM_ACCEPT_TOS=yes
@@ -25,7 +26,7 @@ ENV BATCH_MODE=yes
 ENV PATH="/root/.local/bin:${PATH}"
 
 # Rendi eseguibile e esegui lo script di installazione di Yagna
-RUN chmod +x install_yagna.sh && ./install_yagna.sh
+RUN chmod +x install_yagna.sh && ./install_yagna.sh entrypoint_web.sh
 
 # Copia tutto il resto del codice nell'immagine
 COPY . .
