@@ -1,5 +1,6 @@
 # my-smart-contract-project/docker-compose.yml
 
+
 services:
   golem-node:
     build:
@@ -28,7 +29,7 @@ services:
     environment:
       YAGNA_APPKEY: ${YAGNA_APPKEY}
       YAGNA_API_URL: http://golem-node:7465
-      GSB_URL: tcp://golem-node:7464
+      #GSB_URL: tcp://golem-node:7464
       GLOBAL_CONTEXTS: ${GLOBAL_CONTEXTS}
     ports:
       - "8000:8000"
