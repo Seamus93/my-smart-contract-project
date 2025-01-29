@@ -15,6 +15,7 @@ services:
       - yagna-data:/root/.local/share/yagna
     ports:
       - "7465:7465"
+      - "7464:7464"
     networks:
       - my-network
 
