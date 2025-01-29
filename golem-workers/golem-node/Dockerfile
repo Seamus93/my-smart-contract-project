@@ -31,7 +31,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 RUN chmod +x install_yagna.sh entrypoint.sh && ./install_yagna.sh
 
 # Espone la porta di Yagna
-EXPOSE 7465
+EXPOSE 7465 7464
 
 # Definisci il comando per avviare Yagna
 CMD ["yagna", "service", "run"]
