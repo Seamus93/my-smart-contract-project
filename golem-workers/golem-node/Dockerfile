@@ -34,7 +34,7 @@ RUN chmod +x install_yagna.sh && ./install_yagna.sh entrypoint.sh
 EXPOSE 7465
 
 # Definisci il comando per avviare Yagna
-#CMD ["yagna", "service", "run"]
+CMD ["yagna", "service", "run"]
 
 # Definisci lo script di entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
