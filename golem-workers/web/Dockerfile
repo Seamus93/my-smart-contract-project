@@ -36,4 +36,4 @@ EXPOSE 8000 8080 8081
 
 # Definisci il comando per avviare il server web
 #CMD ["node", "server.js"]
-ENTRYPOINT ["./entrypoint_web.sh"]
+ENTRYPOINT ["sh", "./entrypoint_web.sh"]
