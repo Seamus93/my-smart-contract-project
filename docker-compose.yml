@@ -30,7 +30,7 @@ services:
       YAGNA_APPKEY: ${YAGNA_APPKEY}
       YAGNA_API_URL: http://golem-node:7465
       #GSB_URL: tcp://golem-node:7464
-      GLOBAL_CONTEXTS: ${GLOBAL_CONTEXTS}
+      GLOBAL_CONTEXTS: '["golem_reputation.ReputationService"]'
     ports:
       - "8000:8000"
       - "8080:8080"
