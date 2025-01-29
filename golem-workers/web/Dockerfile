@@ -26,8 +26,8 @@ COPY entrypoint_web.sh .
 #ENV PATH="/root/.local/bin:${PATH}"
 
 # Rendi eseguibile e esegui lo script di installazione di Yagna
-RUN chmod +x install_yagna.sh && ./install_yagna.sh entrypoint_web.sh
-
+#RUN chmod +x install_yagna.sh && ./install_yagna.sh entrypoint_web.sh
+RUN chmod +x entrypoint_web.sh
 # Copia tutto il resto del codice nell'immagine
 COPY . .
 
