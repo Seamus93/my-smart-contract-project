@@ -26,8 +26,8 @@ services:
       - .env
     environment:
       YAGNA_APPKEY: ${YAGNA_APPKEY}
-      YAGNA_API_URL: http://localhost:7465
-      GSB_URL: tcp://localhost:7464
+      YAGNA_API_URL: http://golem-node:7465
+      GSB_URL: tcp://golem-node:7464
       GLOBAL_CONTEXTS: ${GLOBAL_CONTEXTS}
     ports:
       - "8000:8000"
