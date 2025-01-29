@@ -390,25 +390,6 @@ main() {
     fi
 
     ensurepath "$YA_INSTALLER_BIN"
-
-     Avviare Yagna e GSB in background
-    echo "Avviando Yagna e GSB..."
-    yagna service run &
-
-    # Attendere che Yagna sia in esecuzione
-    while ! yagna service status | grep -q '"status": "Running"'; do
-      echo "Attendere che Yagna si avvii..."
-      sleep 2
-    done
-
-    # Creare la chiave di applicazione se non esiste
-    if [ -z "$(yagna app-key list | grep requestor)" ]; then
-      echo "Creando la chiave di applicazione..."
-      yagna app-key create requestor
-    fi
-
-    # Mantenere il processo Yagna in esecuzione
-    wait
 }
 
 main "$@" || exit 1
