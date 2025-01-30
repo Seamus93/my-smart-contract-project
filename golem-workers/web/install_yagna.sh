@@ -359,6 +359,15 @@ main() {
 
     check_terms_of_use
 
+    # Avvia Yagna in background
+    yagna run &
+
+    # Attendere che Yagna sia in ascolto sulla porta 7465
+    while ! nc -z localhost 7465; do
+        say "Waiting for Yagna API to start..."
+        sleep 2
+    done
+
     # Verifica che YAGNA_APPKEY sia impostata
     assert_nz "$YAGNA_APPKEY" "YAGNA_APPKEY must be set in .env"
 
