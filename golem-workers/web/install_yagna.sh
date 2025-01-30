@@ -359,6 +359,15 @@ main() {
 
     check_terms_of_use
 
+    # Verifica che YAGNA_APPKEY sia impostata
+    assert_nz "$YAGNA_APPKEY" "YAGNA_APPKEY must be set in .env"
+
+    # Controlla se la chiave 'requestor' esiste, altrimenti aggiungila
+    if ! yagna app-key list | grep -q 'requestor'; then
+        say "Creating 'requestor' key..."
+        yagna app-key add requestor "$YAGNA_APPKEY"
+    fi
+    
     say "installing to $YA_INSTALLER_BIN"
 
     test -d "$YA_INSTALLER_BIN" || mkdir -p "$YA_INSTALLER_BIN"
