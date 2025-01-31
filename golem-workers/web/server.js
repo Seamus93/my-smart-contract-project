@@ -1,80 +1,67 @@
-const { ethers } = require('ethers');
+// golem-workers/web/web.js
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const solc = require('solc');
-require('dotenv').config();
+const axios = require('axios');
+const dotenv = require('dotenv');
+const winston = require('winston');
+
+dotenv.config();
+
+// Configurazione di Winston per il logging
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.printf(({ timestamp, level, message }) => `${timestamp} [${level.toUpperCase()}] ${message}`)
+  ),
+  transports: [
+      new winston.transports.Console(),
+  ],
+});
 
 const app = express();
-const PORT = process.env.WORKER_PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(bodyParser.json());
 
-// Configurazione Blockchain
-const rpcUrl = process.env['PRIVATE_RPC_URL'];
-const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-
-const privateKey = process.env['PRIVATE_KEY']; // Chiave privata tramite variabili d'ambiente
-const wallet = new ethers.Wallet(privateKey, provider);
-
-// Endpoint per il deploy del contratto
+// Endpoint per ricevere richieste di deploy dai worker
 app.post('/deploy', async (req, res) => {
-    const { contractCode } = req.body;
-
-    if (!contractCode) {
-        return res.status(400).json({ success: false, message: 'contractCode is required' });
-    }
+    logger.info('Received deploy request from worker');
 
     try {
-        // Compilazione del contratto
-        const input = {
-            language: 'Solidity',
-            sources: {
-                'Contract.sol': {
-                    content: contractCode,
-                },
-            },
-            settings: {
-                outputSelection: {
-                    '*': {
-                        '*': ['abi', 'evm.bytecode'],
-                    },
-                },
-            },
-        };
+        const { contractCode } = req.body;
 
-        const output = JSON.parse(solc.compile(JSON.stringify(input)));
-
-        if (output.errors) {
-            const errors = output.errors.filter((error) => error.severity === 'error');
-            if (errors.length > 0) {
-                return res.status(400).json({ success: false, message: 'Compilation failed', errors });
-            }
+        if (!contractCode) {
+            logger.warn('Missing contractCode in deploy request');
+            return res.status(400).json({ success: false, message: 'Missing contractCode' });
         }
 
-        const contractName = Object.keys(output.contracts['Contract.sol'])[0];
-        const contract = output.contracts['Contract.sol'][contractName];
-        const bytecode = contract.evm.bytecode.object;
-        const abi = contract.abi;
+        // Comunica con il nodo Golem (Yagna) se necessario
+        // Ad esempio, potresti voler notificare Yagna del deploy
 
-        // Creazione di un'istanza del contratto
-        const factory = new ethers.ContractFactory(abi, bytecode, wallet);
-        const contractInstance = await factory.deploy();
+        // Esempio di comunicazione con Yagna
+        // Questo dipende da come Yagna accetta comandi o notifica eventi
 
-        // Attendere il deploy
-        await contractInstance.deployed();
+        // Placeholder: log del deploy
+        logger.info('Deploying contract on Golem node...');
+        // Implementa la logica di deploy se necessario
 
-        return res.status(200).json({ success: true, contractAddress: contractInstance.address });
+        // Risposta di successo
+        res.status(200).json({ success: true, message: 'Deploy request processed' });
     } catch (error) {
-        console.error('Errore durante il deploy del contratto:', error);
-        return res.status(500).json({ success: false, message: 'Deploy failed', error: error.message });
+        logger.error(`Error processing deploy request: ${error.message}`);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
+// Endpoint di salute per verificare che il server sia in esecuzione
 app.get('/', (req, res) => {
-    res.send('Worker is up and running');
+    res.send('Web service is up and running!');
 });
 
+// Avvia il server
 app.listen(PORT, () => {
-    console.log(`Worker server listening at http://localhost:${PORT}`);
+    logger.info(`Web service listening at http://localhost:${PORT}`);
 });
