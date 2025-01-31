@@ -82,6 +82,11 @@ app.post('/deploy', async (req, res) => {
     }
 });
 
+// Endpoint di salute per verificare che il server sia in esecuzione
+app.get('/health', (req, res) => {
+    res.send('Deploy contract server is up and running!');
+});
+
 // Avvio del server
 app.listen(PORT, () => {
     logger.info(`Deploy contract server listening at http://localhost:${PORT}`);

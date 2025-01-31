@@ -50,6 +50,7 @@ services:
       PRIVATE_KEY: ${PRIVATE_KEY}
       PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
       API_KEY: ${API_KEY}
+      WORKER_URL: http://worker:8000/deploy
     ports:
       - "3000:3000"
     depends_on:
@@ -69,7 +70,7 @@ services:
       PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
       API_KEY: ${API_KEY}
     ports:
-      - "8001:8000"  # Mappa la porta interna 8000 a 8001 esternamente
+      - "8000:8000"  # Mappa la porta interna 8000 a 8001 esternamente
     depends_on:
       - golem-node
     networks:
