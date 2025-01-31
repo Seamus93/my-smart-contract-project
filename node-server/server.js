@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); // Per CORS
 const { ethers } = require('ethers');
 const solc = require('solc');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const winston = require('winston');
 
