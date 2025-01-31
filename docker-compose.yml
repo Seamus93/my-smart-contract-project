@@ -70,7 +70,7 @@ services:
       PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
       API_KEY: ${API_KEY}
     ports:
-      - "8000:8000"  # Mappa la porta interna 8000 a 8001 esternamente
+      - "8001:8000"  # Mappa la porta interna 8000 a 8001 esternamente
     depends_on:
       - golem-node
     networks:
