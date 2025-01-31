@@ -45,7 +45,7 @@ services:
       - .env
     environment:
       PRIVATE_KEY: ${PRIVATE_KEY}
-      PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
+      ALCHEMY_API_URL: ${ALCHEMY_API_URL}
       API_KEY: ${API_KEY}
       WEB_URL: http://web:8000/deploy
     ports:
