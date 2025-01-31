@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const winston = require('winston');
 
