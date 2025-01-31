@@ -3,8 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Per CORS
-const { ethers } = require('ethers');
-const solc = require('solc');
+const axios = require('axios');
 const dotenv = require('dotenv');
 const winston = require('winston');
 
@@ -33,60 +32,6 @@ app.get('/', (req, res) => {
     res.send('Server is up and running!');
 });
 
-// Configurazione Blockchain
-const rpcUrl = process.env.PRIVATE_RPC_URL;
-const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-
-const privateKey = process.env.PRIVATE_KEY; // Chiave privata tramite variabili d'ambiente
-const wallet = new ethers.Wallet(privateKey, provider);
-
-const api_key = process.env.API_KEY; // API Key per autenticazione
-
-// Funzione per compilare il contratto
-const compileContract = (contractCode) => {
-    const input = {
-        language: 'Solidity',
-        sources: {
-            'Contract.sol': {
-                content: contractCode,
-            },
-        },
-        settings: {
-            outputSelection: {
-                '*': {
-                    '*': ['abi', 'evm.bytecode'],
-                },
-            },
-        },
-    };
-
-    const output = JSON.parse(solc.compile(JSON.stringify(input)));
-
-    if (output.errors) {
-        const errors = output.errors.filter((error) => error.severity === 'error');
-        if (errors.length > 0) {
-            throw new Error(`Compilation failed: ${JSON.stringify(errors)}`);
-        }
-    }
-
-    const contractName = Object.keys(output.contracts['Contract.sol'])[0];
-    const { abi, evm } = output.contracts['Contract.sol'][contractName];
-
-    return { abi, bytecode: evm.bytecode.object };
-};
-
-// Funzione per eseguire il deploy del contratto
-const deployContract = async (abi, bytecode) => {
-    const factory = new ethers.ContractFactory(abi, bytecode, wallet);
-
-    logger.info('Deploying contract...');
-    const contract = await factory.deploy();
-    await contract.deployed();
-
-    logger.info('Contract deployed at:', contract.address);
-    return contract.address;
-};
-
 // Endpoint POST per deploy
 app.post('/deploy', async (req, res) => {
     logger.info('Received POST request to /deploy');
@@ -102,25 +47,38 @@ app.post('/deploy', async (req, res) => {
 
         // Verifica dell'API Key
         const requestApiKey = req.headers['x-api-key'];
-        if (requestApiKey !== api_key) {
+        if (requestApiKey !== process.env.API_KEY) {
             logger.warn('Forbidden: Invalid API Key');
             return res.status(403).json({ success: false, error: 'Forbidden: Invalid API Key' });
         }
 
-        // Compilazione del contratto
-        logger.info('Compiling contract...');
-        const { abi, bytecode } = compileContract(contractCode);
+        // Inoltra la richiesta al worker
+        logger.info('Forwarding deploy request to worker...');
+        const workerUrl = process.env.WORKER_URL || 'http://worker:8000/deploy';
 
-        // Deploy del contratto
-        logger.info('Deploying contract...');
-        const contractAddress = await deployContract(abi, bytecode);
+        const response = await axios.post(workerUrl, { contractCode }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': process.env.API_KEY // Se il worker richiede un'API Key
+            },
+            timeout: 60000 // Timeout di 60 secondi
+        });
 
-        // Risposta di successo
-        res.status(200).json({ success: true, contractAddress });
+        // Verifica della risposta del worker
+        if (response.data && response.data.success) {
+            logger.info(`Contract deployed at address: ${response.data.contractAddress}`);
+            return res.status(200).json({ success: true, contractAddress: response.data.contractAddress });
+        } else {
+            logger.error('Worker returned a failure response');
+            return res.status(500).json({ success: false, error: 'Worker failed to deploy contract' });
+        }
 
     } catch (error) {
         logger.error(`Error during deployment: ${error.message}`);
-        res.status(500).json({ success: false, error: error.message });
+        if (error.response && error.response.data) {
+            return res.status(500).json({ success: false, error: error.response.data.error || error.message });
+        }
+        return res.status(500).json({ success: false, error: error.message });
     }
 });
 
