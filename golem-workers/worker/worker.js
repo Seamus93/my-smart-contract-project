@@ -59,7 +59,7 @@ app.get('/', (req, res) => {
     res.send('Worker service is up and running!');
 });
 
-// Avvia il server
-app.listen(PORT, () => {
-    logger.info(`Worker service listening at http://localhost:${PORT}`);
+// Avvia il worker server su 0.0.0.0
+app.listen(PORT, '0.0.0.0', () => {
+    logger.info(`Worker server listening at http://0.0.0.0:${PORT}`);
 });

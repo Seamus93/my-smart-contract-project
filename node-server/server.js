@@ -44,9 +44,11 @@ app.post('/deploy', async (req, res) => {
             logger.warn('Missing contractCode parameter');
             return res.status(400).json({ success: false, error: 'Missing contractCode parameter' });
         }
+        
 
         // Verifica dell'API Key
         const requestApiKey = req.headers['x-api-key'];
+        logger.info(`Received API Key: ${requestApiKey}`);
         if (requestApiKey !== process.env.API_KEY) {
             logger.warn('Forbidden: Invalid API Key');
             return res.status(403).json({ success: false, error: 'Forbidden: Invalid API Key' });
