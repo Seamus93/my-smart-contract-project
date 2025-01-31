@@ -2,9 +2,9 @@
     "name": "golem-workers",
     "version": "1.0.0",
     "description": "Worker service for deploying smart contracts",
-    "main": "worker.js",
+    "main": "web.js",
     "scripts": {
-      "start": "node worker.js"
+      "start": "node web.js"
     },
     "dependencies": {
       "express": "^4.17.1",

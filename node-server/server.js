@@ -56,7 +56,7 @@ app.post('/deploy', async (req, res) => {
 
         // Inoltra la richiesta al worker
         logger.info('Forwarding deploy request to worker...');
-        const workerUrl = process.env.WORKER_URL || 'http://worker:8000/send-deploy';
+        const workerUrl = process.env.WEB_URL || 'http://web:8000/deploy';
 
         const response = await axios.post(workerUrl, { contractCode }, {
             headers: {

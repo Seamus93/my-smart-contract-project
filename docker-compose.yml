@@ -16,7 +16,6 @@ services:
       - yagna-data:/root/.local/share/yagna
     ports:
       - "7465:7465"
-      - "7464:7464"
     networks:
       - my-network
 
@@ -33,8 +32,6 @@ services:
       GLOBAL_CONTEXTS: '["golem_reputation.ReputationService"]'
     ports:
       - "8000:8000"
-      - "8080:8080"
-      - "8081:8081"
     depends_on:
       - golem-node
     networks:
@@ -50,29 +47,12 @@ services:
       PRIVATE_KEY: ${PRIVATE_KEY}
       PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
       API_KEY: ${API_KEY}
-      WORKER_URL: http://worker:8000/deploy
+      WEB_URL: http://web:8000/deploy
     ports:
       - "3000:3000"
     depends_on:
       - golem-node
-      - worker
-    networks:
-      - my-network
-
-  worker:
-    build:
-      context: ./golem-workers/worker
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    environment:
-      PRIVATE_KEY: ${PRIVATE_KEY}
-      PRIVATE_RPC_URL: ${PRIVATE_RPC_URL}
-      API_KEY: ${API_KEY}
-    ports:
-      - "8001:8000"  # Mappa la porta interna 8000 a 8001 esternamente
-    depends_on:
-      - golem-node
+      - web
     networks:
       - my-network
 
