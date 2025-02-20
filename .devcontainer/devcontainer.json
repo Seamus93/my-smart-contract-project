@@ -1,9 +1,16 @@
 {
+  "name": "My Dev Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "node-server",          // Il nome del service su cui sviluppi
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
-      "label": "Golem Deploy",
       "visibility": "public"
     }
-  }
+  },
+  // Pubblica tutte le porte eventualmente esposte dai service
+  "publishAllPorts": true,
+
+  // Se vuoi fermare i servizi Compose al termine
+  "shutdownAction": "stopCompose"
 }
