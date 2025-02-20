@@ -1,14 +1,14 @@
 {
   "name": "My Dev Container",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "node-server",          // Il nome del service su cui sviluppi
+  "service": "node-server",
+  "workspaceFolder": "/my-smart-contract-project", 
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
+      "label": "Deploy Golem",
       "visibility": "public"
     }
   },
-
-  // Se vuoi fermare i servizi Compose al termine
   "shutdownAction": "stopCompose"
 }
