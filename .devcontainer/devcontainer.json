@@ -8,8 +8,6 @@
       "visibility": "public"
     }
   },
-  // Pubblica tutte le porte eventualmente esposte dai service
-  "publishAllPorts": true,
 
   // Se vuoi fermare i servizi Compose al termine
   "shutdownAction": "stopCompose"
