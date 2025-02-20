@@ -1,0 +1,9 @@
+{
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Golem Deploy",
+      "visibility": "public"
+    }
+  }
+}
